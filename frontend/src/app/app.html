@@ -1,0 +1,68 @@
+<main class="container">
+  <h1>Job Application Tracker</h1>
+
+  <div class="form-box">
+    <h2>{{ editingId !== null ? 'Edit application' : 'Add application' }}</h2>
+
+    <input placeholder="Company" [(ngModel)]="form.company" />
+    <input placeholder="Role" [(ngModel)]="form.role" />
+
+    <select [(ngModel)]="form.status">
+      <option value="Applied">Applied</option>
+      <option value="Interview">Interview</option>
+      <option value="Offer">Offer</option>
+      <option value="Rejected">Rejected</option>
+    </select>
+
+    <input type="date" [(ngModel)]="form.appliedDate" />
+    <input placeholder="Notes" [(ngModel)]="form.notes" />
+
+    <button (click)="save()" [disabled]="!form.company || !form.role">
+      {{ editingId !== null ? 'Update' : 'Add' }}
+    </button>
+    @if (editingId !== null) {
+      <button (click)="resetForm()">Cancel</button>
+    }
+  </div>
+
+  <label>
+    Filter by status:
+    <select (change)="onFilterChange($event)">
+      <option value="">All</option>
+      <option value="Applied">Applied</option>
+      <option value="Interview">Interview</option>
+      <option value="Offer">Offer</option>
+      <option value="Rejected">Rejected</option>
+    </select>
+  </label>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Company</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Applied</th>
+        <th>Notes</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (app of applications(); track app.id) {
+        <tr>
+          <td>{{ app.company }}</td>
+          <td>{{ app.role }}</td>
+          <td>{{ app.status }}</td>
+          <td>{{ app.appliedDate }}</td>
+          <td>{{ app.notes }}</td>
+          <td>
+            <button (click)="edit(app)">Edit</button>
+            <button (click)="remove(app.id)">Delete</button>
+          </td>
+        </tr>
+      } @empty {
+        <tr><td colspan="6">No applications yet.</td></tr>
+      }
+    </tbody>
+  </table>
+</main>
